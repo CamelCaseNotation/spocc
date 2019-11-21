@@ -47,6 +47,8 @@ type SpoccReconciler struct {
 // +kubebuilder:rbac:groups=paul.blart,resources=spoccs,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=paul.blart,resources=spoccs/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=core,resources=namespaces,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=core,resources=limitranges,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=core,resources=resourcequotas,verbs=get;list;watch;create;update;patch;delete
 
 // Reconcile creates a default LimitRange and ResourceQuota in Namespaces with label "app=decco" which
 // doesn't have one created by this controller
