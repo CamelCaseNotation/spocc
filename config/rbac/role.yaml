@@ -9,18 +9,6 @@ rules:
 - apiGroups:
   - ""
   resources:
-  - limitranges
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - ""
-  resources:
   - namespaces
   verbs:
   - create
@@ -33,31 +21,7 @@ rules:
 - apiGroups:
   - ""
   resources:
-  - resourcequotas
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - paul.blart
-  resources:
-  - spoccs
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - paul.blart
-  resources:
-  - spoccs/status
+  - namespaces/status
   verbs:
   - get
   - patch

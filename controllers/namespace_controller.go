@@ -25,34 +25,28 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
 
-	paulv1alpha1 "github.com/camelcasenotation/spocc/api/v1alpha1"
+	corev1 "k8s.io/api/core/v1"
 )
 
 var spoccResourceLabel = map[string]string{
 	"spocc": "blart",
 }
 
-// SpoccReconciler reconciles a Spocc object
-type SpoccReconciler struct {
+// NamespaceReconciler reconciles a Namespace object
+type NamespaceReconciler struct {
 	client.Client
 	Log    logr.Logger
 	Scheme *runtime.Scheme
 }
 
-// +kubebuilder:rbac:groups=paul.blart,resources=spoccs,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=paul.blart,resources=spoccs/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=core,resources=namespaces,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=core,resources=limitranges,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=core,resources=resourcequotas,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=core,resources=namespaces/status,verbs=get;update;patch
 
-// Reconcile creates a default LimitRange and ResourceQuota in Namespaces with label "app=decco" which
-// doesn't have one created by this controller
-func (r *SpoccReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
+func (r *NamespaceReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	ctx := context.Background()
 	log := r.Log.WithValues("spocc", req.NamespacedName)
 
@@ -111,7 +105,7 @@ func (r *SpoccReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	return ctrl.Result{}, nil
 }
 
-func (r *SpoccReconciler) createDefaultLimitRange(ctx context.Context, namespace corev1.Namespace) error {
+func (r *NamespaceReconciler) createDefaultLimitRange(ctx context.Context, namespace corev1.Namespace) error {
 	defaultLimitRange := &corev1.LimitRange{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "default",
@@ -140,7 +134,7 @@ func (r *SpoccReconciler) createDefaultLimitRange(ctx context.Context, namespace
 	return nil
 }
 
-func (r *SpoccReconciler) createDefaultResourceQuota(ctx context.Context, namespace corev1.Namespace) error {
+func (r *NamespaceReconciler) createDefaultResourceQuota(ctx context.Context, namespace corev1.Namespace) error {
 	defaultResourceQuota := &corev1.ResourceQuota{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "default",
@@ -162,20 +156,8 @@ func (r *SpoccReconciler) createDefaultResourceQuota(ctx context.Context, namesp
 	return nil
 }
 
-// Reference:
-// https://github.com/kubernetes-sigs/cluster-api/blob/master/controllers/machineset_controller.go#L476
-
-// SetupWithManager makes this controller only worry about events on Namespaces
-func (r *SpoccReconciler) SetupWithManager(mgr ctrl.Manager) error {
-	// https://github.com/kubernetes-sigs/cluster-api/blob/master/controllers/machineset_controller.go#L76
-	// https://github.com/kubernetes-sigs/cluster-api/blob/master/controllers/machineset_controller.go#L476
-	// Maybe use the above code to enable re-creating deleted LimitRanges in a Namespace
-
-	// NOTE: only the last "For()" is registered
+func (r *NamespaceReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		// TODO: Remove Spocc API resource since we only created it for kubebuilder scaffolding to be happy
-		For(&paulv1alpha1.Spocc{}).
 		For(&corev1.Namespace{}).
-		Owns(&corev1.LimitRange{}).
 		Complete(r)
 }
