@@ -1,0 +1,22 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Spocc Controller",
+            "type": "go",
+            "request": "launch",
+            /*
+            "env": {
+                "KUBECONFIG": "/path/to/kubeconfig"
+                // By default, ~/.kube/config will be used with whatever default context is set
+            },
+            */
+            "mode": "exec",
+            "program": "${workspaceFolder}/bin/manager",
+
+        }
+    ]
+}

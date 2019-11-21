@@ -1,0 +1,56 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.2.4
+  creationTimestamp: null
+  name: spoccs.paul.blart
+spec:
+  group: paul.blart
+  names:
+    kind: Spocc
+    listKind: SpoccList
+    plural: spoccs
+    singular: spocc
+  scope: Namespaced
+  validation:
+    openAPIV3Schema:
+      description: Spocc is the Schema for the spoccs API
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          description: SpoccSpec defines the desired state of Spocc
+          properties:
+            foo:
+              description: Foo is an example field of Spocc. Edit Spocc_types.go to
+                remove/update
+              type: string
+          type: object
+        status:
+          description: SpoccStatus defines the observed state of Spocc
+          type: object
+      type: object
+  version: v1alpha1
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
