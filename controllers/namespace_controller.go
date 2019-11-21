@@ -46,6 +46,8 @@ type NamespaceReconciler struct {
 // +kubebuilder:rbac:groups=core,resources=namespaces,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=core,resources=namespaces/status,verbs=get;update;patch
 
+// Reconcile creates a default LimitRange and ResourceQuota in Namespaces with label "app=decco" which
+// doesn't have one created by this controller
 func (r *NamespaceReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	ctx := context.Background()
 	log := r.Log.WithValues("spocc", req.NamespacedName)
@@ -156,6 +158,7 @@ func (r *NamespaceReconciler) createDefaultResourceQuota(ctx context.Context, na
 	return nil
 }
 
+// SetupWithManager makes this controller only worry about events on Namespaces
 func (r *NamespaceReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&corev1.Namespace{}).
